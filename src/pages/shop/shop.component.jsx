@@ -28,6 +28,9 @@ class ShopPage extends React.Component {
 } 
 
 const mapDispatchToProps = dispatch => ({
+  // This is possible using redux-thunk middleware
+  // When dispatching a function instead of an object, the middleware will call that function with dispatch method itself as the first argument
+  // dispatch(fetchCollectionsStartAsync(dispatch))
   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync())
 });
 
