@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import'firebase/auth';
+import 'firebase/auth';
 
 const config = {
   apiKey: "AIzaSyBEFlkZ-xNcOTJbtTW7T54jDqIZS5wbtDY",
@@ -19,13 +19,16 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   const snapShot = await userRef.get();
 
   if (!snapShot.exists) {
-    const { displayName, email } = userAuth;
+    const {
+      displayName,
+      email
+    } = userAuth;
     const createdAt = new Date();
 
     try {
       await userRef.set({
         displayName,
-        email, 
+        email,
         createdAt,
         ...additionalData
       })
@@ -52,7 +55,10 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
 
 export const convertCollectionsSnapshotToMap = (collections) => {
   const transformedCollection = collections.docs.map(doc => {
-    const { title, items } = doc.data();
+    const {
+      title,
+      items
+    } = doc.data();
 
     return {
       routeName: encodeURI(title.toLowerCase()),
@@ -61,7 +67,7 @@ export const convertCollectionsSnapshotToMap = (collections) => {
       items
     };
   });
-  
+
   return transformedCollection.reduce((accumulator, collection) => {
     accumulator[collection.title.toLowerCase()] = collection;
     return accumulator;
@@ -71,10 +77,12 @@ export const convertCollectionsSnapshotToMap = (collections) => {
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-provider.setCustomParameters({ prompt: 'select_account' });
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
 
 export default firebase;
