@@ -8,22 +8,21 @@ import CheckoutPage from './pages/checkout/checkout.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './components/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { selectCurrentUser } from './redux/user/user.selector';
+import { checkUserSession } from './redux/user/user.actions';
 import './App.css';
 
 class App extends React.Component {
-  unsubscribeFromAuth = null;
-
   componentDidMount() {
-    
+    const { checkUserSessionProp } = this.props;
+    checkUserSessionProp();
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();
   }
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Header />
         <Switch>
           <Route exact path='/' component={HomePage} />
@@ -39,7 +38,7 @@ class App extends React.Component {
             }
           />
         </Switch>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -48,4 +47,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 });
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = dispatch => ({
+  checkUserSessionProp: () => dispatch(checkUserSession()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
